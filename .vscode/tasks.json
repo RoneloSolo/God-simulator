@@ -1,0 +1,11 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "make_file",
+            "type": "shell",
+            "command": "g++",
+            "args": ["src/*.cpp", "-o", "build/Game", "-I", "$include/", "-L", "lib/", "-O2", "-Wall", "-Wno-missing-braces", "-lraylib", "-lGL", "-lm", "-lpthread", "-ldl", "-lrt", "-lX11"]
+        }
+    ]
+}
