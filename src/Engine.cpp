@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "MapGenerator.h"
 #include <iostream>
+#include "Ecs.h"
 
 static Texture texture;
 
@@ -10,7 +11,7 @@ static double lastPhysicsTime = 0;
 Engine::Engine(int width, int height, const char* title) {
     scaledWidth = width / scale;
     scaledHeight = height / scale;
-
+    
 /*======================Initialize-Raylib-Window===============================*/
 
     SetTargetFPS(60);
