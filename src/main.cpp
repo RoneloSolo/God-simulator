@@ -1,10 +1,10 @@
-#include "Game.h"
+#include "Engine.h"
 
-int main(void){
-    Game game{1920, 1080, "Ant-simulator"};
-    while (!game.Close()){
-        game.Tick();
+int main(void) {
+    Engine engine{1920, 1080, "Ant-simulator"};
+    while (!engine.Close()) {
+        engine.Tick();
     }
-    game.Close();
+    engine.Close();
     return 0;
 }

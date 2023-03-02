@@ -1,12 +1,13 @@
 #pragma  once
 
-class Game{
+class Engine {
     public:
-        Game(int width, int height, const char* title);
-        ~Game() noexcept;
+        Engine(int width, int height, const char* title);
+        ~Engine() noexcept;
         bool Close() const;
         void Tick();
     private:
         void Draw();
         void Update();
+        void PhysicsUpdate();
 };
