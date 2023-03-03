@@ -9,9 +9,12 @@ static entt::registry registry;
 static System ecsSystem;
 
 static int32_t entitiesCount = 0;
+static const int32_t MAX_ENTITIES = 1000;
 
 static const double PHYSICS_UPDATE_TIME =  0.2;
 static double lastPhysicsTime = 0;
+
+static Vector2 mousePos;
 
 Engine::Engine(int width, int height, const char* title) {
     scaledWidth = width / scale;
@@ -24,6 +27,7 @@ Engine::Engine(int width, int height, const char* title) {
 /*======================Initialize Here==========================================*/
 
     texture = GenerateMap(GetRandomValue(-99999, 99999), GetRandomValue(-99999, 99999));
+    // ecsSystem.CreateNpc(registry);
 
 /*==============================================================================*/
 }
@@ -44,55 +48,41 @@ void Engine::Draw() {
 
     DrawTextureEx(texture, Vector2{0, 0}, 0, scale, WHITE);
 
-    ecsSystem.Draw(registry);
+    // ecsSystem.Draw(registry);5
 
-    DrawText(TextFormat("entities count: %d", entitiesCount), 0, 0, 24, BLACK);
     DrawFPS(0, 50);
 
 
 /*=============================================================================*/
-
     EndDrawing();
 }
 
 void Engine::Update() {
 /*==================================Update====================================*/
-
+    mousePos = Vector2{GetMousePosition().x / scale, GetMousePosition().y / scale};
     if(IsKeyPressed(KEY_SPACE)) texture = GenerateMap(GetRandomValue(-99999, 99999), GetRandomValue(-99999, 99999));
 
-    if(IsKeyPressed(KEY_S)) {
-        for(int i = 0; i < 1000; i++) {
-            auto entity = registry.create();
+    // ecsSystem.Move(registry);
+    // ecsSystem.Input(registry);5
 
-            Vector2 pos = Vector2{(float)GetRandomValue(-1000, 1000), (float)GetRandomValue(-1000, 1000)};
-            Vector2 scale = Vector2{(float)GetRandomValue(1, 50), (float)GetRandomValue(1, 50)};
-            Color color = Color{(unsigned char)GetRandomValue(0, 255), (unsigned char)GetRandomValue(0, 255), (unsigned char)GetRandomValue(0, 255), 255};
-
-            Vector2 vel = Vector2{(float)GetRandomValue(-1,1), (float)GetRandomValue(-1,1)};
-            registry.emplace<Transform2D>(entity, pos, scale, 0);
-            registry.emplace<KinematicBody2D>(entity, vel);
-            registry.emplace<Sprite2D>(entity, color);
+    /*==================================paint on texture=============================================*/
+    
+    if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        Image image = LoadImageFromTexture(texture);
+        int32_t stroke = 1;
+        int32_t amountOfPixels = stroke * stroke;
+        
+        for(int x = 0; x < stroke; x++) {
+            for(int y = 0; y < stroke; y++) {
+                ImageDrawPixel(&image, mousePos.x - stroke/2 + x, mousePos.y - stroke/2 + y, WHITE);
+            }
         }
-        entitiesCount += 1000;
+
+        texture = LoadTextureFromImage(image);
+        UnloadImage(image);
     }
-
-    if(IsKeyPressed(KEY_A)) {
-        for(int i = 0; i < 10000; i++) {
-            auto entity = registry.create();
-
-            Vector2 pos = Vector2{(float)GetRandomValue(-1000, 1000), (float)GetRandomValue(-1000, 1000)};
-            Vector2 scale = Vector2{(float)GetRandomValue(1, 50), (float)GetRandomValue(1, 50)};
-            Color color = Color{(unsigned char)GetRandomValue(0, 255), (unsigned char)GetRandomValue(0, 255), (unsigned char)GetRandomValue(0, 255), 255};
-
-            Vector2 vel = Vector2{(float)GetRandomValue(-1,1), (float)GetRandomValue(-1,1)};
-            registry.emplace<Transform2D>(entity, pos, scale, 0);
-            registry.emplace<KinematicBody2D>(entity, vel);
-            registry.emplace<Sprite2D>(entity, color);
-        }
-        entitiesCount += 10000;
-    }
-
-    ecsSystem.Move(registry);
+    
+    /*=====================================================================================*/
 
 /*=====================================================================================*/
 }
