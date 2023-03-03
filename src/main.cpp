@@ -1,4 +1,4 @@
-#include "Engine.h"
+#include "Engine.hpp"
 
 int main(void) {
     Engine engine{1920, 1080, "Ant-simulator"};
