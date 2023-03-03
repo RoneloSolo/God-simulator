@@ -2,6 +2,7 @@
 #include "MapGenerator.hpp"
 #include <iostream>
 #include "System.hpp"
+#include "Gui.hpp"
 
 static Texture texture;
 
@@ -25,7 +26,8 @@ Engine::Engine(int width, int height, const char* title) {
     SetTextureFilter(texture, TEXTURE_FILTER_POINT);
 
 /*======================Initialize Here==========================================*/
-
+    
+    InitGui();
     texture = GenerateMap(GetRandomValue(-99999, 99999), GetRandomValue(-99999, 99999));
     // ecsSystem.CreateNpc(registry);
 
@@ -49,40 +51,40 @@ void Engine::Draw() {
     DrawTextureEx(texture, Vector2{0, 0}, 0, scale, WHITE);
 
     // ecsSystem.Draw(registry);5
-
+    DrawGui();
     DrawFPS(0, 50);
 
-
 /*=============================================================================*/
+
     EndDrawing();
 }
 
 void Engine::Update() {
 /*==================================Update====================================*/
     mousePos = Vector2{GetMousePosition().x / scale, GetMousePosition().y / scale};
+    
     if(IsKeyPressed(KEY_SPACE)) texture = GenerateMap(GetRandomValue(-99999, 99999), GetRandomValue(-99999, 99999));
 
-    // ecsSystem.Move(registry);
-    // ecsSystem.Input(registry);5
-
-    /*==================================paint on texture=============================================*/
+    UpdateGui();
     
+    // ecsSystem.Move(registry);
+    // ecsSystem.Input(registry);
+
     if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+
         Image image = LoadImageFromTexture(texture);
         int32_t stroke = 1;
         int32_t amountOfPixels = stroke * stroke;
         
         for(int x = 0; x < stroke; x++) {
             for(int y = 0; y < stroke; y++) {
-                ImageDrawPixel(&image, mousePos.x - stroke/2 + x, mousePos.y - stroke/2 + y, WHITE);
+                ImageDrawPixel(&image, mousePos.x - stroke/2 + x, mousePos.y - stroke/2 + y, colors[colorSelected]);
             }
         }
 
         texture = LoadTextureFromImage(image);
         UnloadImage(image);
     }
-    
-    /*=====================================================================================*/
 
 /*=====================================================================================*/
 }

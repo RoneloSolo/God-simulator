@@ -85,5 +85,6 @@
     "map": "cpp",
     "set": "cpp",
     "unordered_set": "cpp"
-  }
+  },
+  "C_Cpp_Runner.useAddressSanitizer": false
 }
